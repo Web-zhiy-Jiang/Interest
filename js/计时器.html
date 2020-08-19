@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            margin: 50px auto;
+            width: 200px;
+            border: 1px solid black;
+            background-color: thistle;
+            height: 200px;
+        }
+
+        .show {
+
+            line-height: 50px;
+            text-align: center;
+        }
+
+        input {
+            background-color: yellow;
+            display: block;
+            text-align: center;
+            margin: 10px auto;
+            width: 70px;
+        }
+
+        input :nth-child(3) {
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="show">
+
+            <span id="hour">00</span>
+            <span>:</span>
+            <span id="min">00</span>
+            <span>:</span>
+            <span id="sec">00</span>
+
+        </div>
+        <!-- <input type="button" value="start" onclick="start()"> -->
+        <input type="button" value="start" id="btn1">
+        <input type="button" value="reset" id="reset">
+    </div>
+    <script type="text/javascript">
+        function $(id) {
+            return document.getElementById(id);
+        }
+        function digitalProcessing(value) {
+            if (value < 10) {
+                return "0" + value;
+            }
+            return value;
+        }
+        var i = 0;
+        var time = 0;
+        var isRunning = false;
+        //    页面加载完后运行
+        window.onload = function () {
+
+
+            $("btn1").onclick = function () {
+                isRunning = !isRunning;
+                if (isRunning) {
+                    $("btn1").value = "pause";
+                    startFun();
+                    // console.log("1")
+                }
+                else {
+                    $("btn1").value = "start";
+                    pauseFun();
+                }
+            }
+
+            function startFun() {
+                console.log("点击了开始按钮")
+                // 多次点击start按钮.显示的时间更新速度变快
+                // 原因：不是定时器加速了，而是多个定时器在同时作用给我们产生的错觉。
+                // 因此我们在触发定时器事件时，需要注意清除上一个定时器
+                if (time) clearInterval(time);
+                time = setInterval(() => {
+                    i++;
+                    $("sec").innerHTML = digitalProcessing(i % 60);
+                    $("min").innerHTML = digitalProcessing(parseInt(i / 60));
+                    $("hour").innerHTML = digitalProcessing(parseInt(i / 3600));
+                }, 1000)
+            }
+
+            function pauseFun() {
+                console.log("点击了暂停按钮")
+                clearInterval(time)
+            }
+            $("reset").onclick = function () {
+                console.log("点击了复位按钮")
+                clearInterval(time)
+                i = 0;
+                $("sec").innerHTML = "00";
+                $("min").innerHTML = "00";
+                $("hour").innerHTML = "00";
+                isRunning = false;
+                $("btn1").value = "start";
+            }
+        }
+    </script>
+</body>
+
+</html>
