@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #div1 {
+            width: 250px;
+            height: 250px;
+            border: 1px solid black;
+            padding: 50px;
+            text-align: center;
+            margin: 100px auto;
+            background-color: lightgray;
+        }
+
+        #div1 input {
+            width: 250px;
+            height: 30px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        #div1 span {
+            margin-top: 5px;
+            font-size: 14px;
+            color: gray;
+        }
+
+        #div1 .testCode {
+            width: 70px;
+            height: 30px;
+            line-height: 30px;
+            background-color: gray;
+            float: left;
+            margin: 10px 0px 0px 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            var oUsername = document.getElementById("username");
+            var oUsername_span = document.getElementById("username_span");
+            var oPassword = document.getElementById("password");
+            var oDiv1 = document.getElementById("div1");
+            var oDivs = oDiv1.getElementsByClassName("testCode");
+
+            // 添加失去焦点事件
+            oUsername.onblur = function () {
+                var oValue = oUsername.value;
+
+                if (oValue.length < 6 || oValue.length > 18) {
+                    oUsername_span.innerHTML = "用户名长度应为6~18个字符";
+                    oUsername_span.style.color = "red";
+                }
+                else if (!/[a-zA-Z]/.test(oValue[0])) {
+                    oUsername_span.innerHTML = "用户名应为以字母开头";
+                    oUsername_span.style.color = "red";
+                }
+                else if (/\W/.test(oValue)) {
+                    oUsername_span.innerHTML = "用户名只能包含字母、数字或下划线";
+                    oUsername_span.style.color = "red";
+                }
+                else {
+                    oUsername_span.innerHTML = "用户名符合条件";
+                    oUsername_span.style.color = "green";
+                }
+            }
+            // 密码强中弱判断规则
+            // 弱：    纯数字  纯小写  纯大写
+            // 中：    两两混合
+            // 强：    三种
+
+            // keydown事件触发的事件是，文本输入之前
+            // keyup
+            oPassword.onkeyup = function () {
+                var oValue = this.value;
+                for(let i = 0;i<oDivs.length;i++){
+                    oDivs[i].style.backgroundColor = "gray";
+                }
+                if (oValue.length >= 6) {
+                    // 开始密码强度验证
+                    if (/^\d+$/.test(oValue) || /^[a-z]+$/.test(oValue) || /^[A-Z]+$/.test(oValue)) {
+                        oDivs[0].style.backgroundColor = "green";
+                    } else if (/\d/.test(oValue) && /[a-z]/.test(oValue) && /[A-Z]/.test(oValue)) {
+                        oDivs[2].style.backgroundColor = "green";
+                    }
+                    else {
+                        oDivs[1].style.backgroundColor = "green";
+                    }
+                }
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div id="div1">
+        <input type="text" id="username" placeholder="username">
+        <span id="username_span">6-18个字符，可使用字母、数字、下划线、需以字母开头</span>
+        <input type="text" id="password">
+        <div class="testCode">弱</div>
+        <div class="testCode">中</div>
+        <div class="testCode">强</div>
+    </div>
+</body>
+
+</html>
