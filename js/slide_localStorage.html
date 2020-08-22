@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #slide {
+            position: relative;
+            width: 600px;
+            height: 30px;
+            border: 1px solid black;
+            margin: 100px auto;
+        }
+
+        #block {
+            width: 30px;
+            height: 30px;
+            background-color: blue;
+            position: absolute;
+            left: 0px;
+        }
+
+        #full {
+            width: 0px;
+            height: 30px;
+            background-color: orange;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            var oSlide = document.getElementById("slide");
+            var oFull = document.getElementById('full');
+            var oBlock = document.getElementById("block")
+
+            // 重新获取本地存储滑块的位置
+            if (!window.localStorage) {
+                alert("当前页面不支持localStorage");
+            }
+            else {
+                var l = localStorage.getItem("slice") ? localStorage.getItem("slice") : 0;
+                oBlock.style.left = l + "px";
+                // 填充部分跟随滑块进行填充
+                oFull.style.width = l + "px";
+            }
+
+            oBlock.onmousedown = function (ev) {
+                var e = ev || window.event;
+                var offsetX = e.clientX - oBlock.offsetLeft;
+
+                document.onmousemove = function (ev) {
+                    var e = ev || window.event;
+                    var l = e.clientX - offsetX;
+                    oBlock.style.backgroundColor = "blue";
+                    if (l < 0) {
+                        l = 0;
+                    }
+                    if (l > 570) {
+                        l = 570;
+                        oBlock.style.backgroundColor = "orange";
+                    }
+                    oBlock.style.left = l + "px";
+                    // 填充部分跟随滑块进行填充
+                    oFull.style.width = l + "px";
+                    if (!window.localStorage) {
+                        alert("当前页面不支持localStorage");
+                    }
+                    else {
+                        localStorage.setItem("slice", l)
+                    }
+                }
+            }
+            document.onmouseup = function () {
+                document.onmousemove = null;
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div id="slide">
+        <div id="full"></div>
+        <div id="block"></div>
+    </div>
+</body>
+
+</html>

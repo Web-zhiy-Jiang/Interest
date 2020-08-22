@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./startMove.js"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #ul1 {
+            height: 366px;
+            width: 366px;
+            border: 1px solid black;
+            margin: 100px auto;
+            position: relative;
+        }
+
+        #ul1 li {
+            list-style: none;
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            margin: 10px;
+            float: left;
+            background-color: gray;
+            z-index: 0;
+        }
+        #ul1 li img{width: 100%;height: 100%;}
+
+
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            var oUl = document.getElementById("ul1");
+            var aLis = oUl.getElementsByTagName("li");
+            var currentIndex = 0;
+
+            // 相对定位转绝对定位：文档流的转换
+            for (var i = 0; i < aLis.length; i++) {
+                aLis[i].style.left = aLis[i].offsetLeft + "px";
+                aLis[i].style.top = aLis[i].offsetTop + "px";
+                var oImg = document.createElement("img");
+                oImg.src = "image/"+(i+2)+".jpg";
+                aLis[i].appendChild(oImg);
+            }
+            for (var i = 0; i < aLis.length; i++) {
+                aLis[i].style.position = 'absolute';
+                aLis[i].style.margin = "0px";
+
+                // 给每一个li 标签添加一个移入移出方法
+                aLis[i].onmouseover = function () {
+                    // 将放大的图片层次最大
+                    this.style.zIndex = currentIndex++;
+                    startMove(this, {
+                        width: 200,
+                        height: 200,
+                        marginLeft: -50,
+                        marginTop: -50,
+                    })
+                }
+                aLis[i].onmouseout = function () {
+                    startMove(this, {
+                        width: 100,
+                        height: 100,
+                        marginLeft: 0,
+                        marginTop: 0,
+                    })
+                }
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <ul id="ul1">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</body>
+
+</html>
